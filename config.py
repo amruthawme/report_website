@@ -1,0 +1,8 @@
+server = 'MPL-SHETTYA'
+database = 'amrutha_dec4_01'
+table_name = 'sampletable'
+driver = '{SQL Server}'
+report1_name = 'wire_label.xlsx'
+report2_name = 'cabel_label.xlsx'
+report3_name = 'status_report.xlsx'
+report4_name = 'modified_status_report.xlsx'
