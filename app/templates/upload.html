@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WME</title>
+    <style>
+            body {
+                background-color: 	#f0f8ff;
+                background-size: auto;
+                text-align: center;
+            }
+
+            #bottom-content {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100%;
+                background-color: #fff; /* Background color for the bottom section */
+                text-align: center; /* Center text and image horizontally */
+                padding: 10px; /* Add some padding around the content */
+            }
+
+            #bottom-content a {
+                text-decoration: none; /* Remove underline from the link */
+            }
+
+            #bottom-content img {
+                max-width: 500px; /* Set the maximum width for the image */
+                vertical-align: middle; /* Vertically align the image in the middle */
+            }
+
+
+        h1 {
+            color: black;
+            font-size: 28px; /* Increase the font size */
+        }
+
+        /* Style for the buttons */
+        .button-container {
+            display: flex;
+            flex-direction: row; /* Buttons in a row */
+            justify-content: center; /* Center align buttons horizontally */
+            margin-top: 20px; /* Adjust the margin as needed */
+        }
+
+        .button-container button {
+            margin: 5px; /* Add spacing between buttons */
+        }
+
+        #logoutButton {
+            background-color: #cd5c5c;
+            padding: 4px 10px;
+            border: none;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        #logoutButton:hover {
+            transform: scale(1.05);
+        }
+
+    </style>
+</head>
+<body>
+    <h1>WME</h1>
+
+          <br>
+
+        <button id="listDatabasesButton">List Databases</button>
+    <br>
+        <form method="POST" action="/update_config" id="configForm">
+            <label for="server">Server:</label>
+            <input type="text" name="server" value="{{ config.server }}">
+
+            <br>
+            <br>
+
+            <label for="database">Database:</label>
+            <select name="database_select" id="database_select">
+                <option value="">Select a Database</option>
+            </select>
+
+            <label for="manual_database">or Manually Enter:</label>
+<!--        <input type="text" name="manual_database" id="manual_database">-->
+            <input type="text" id="manual_database" name="manual_database" placeholder="Enter database name">
+
+            <br>
+            <br>
+
+            <label for="table_name">Table Name:</label>
+            <input type="text" name="table_name" value="{{ config.table_name }}"><br>
+
+            <br>
+            <input type="submit" value="Update Config">
+        </form>
+
+
+
+        <!-- File Upload Form -->
+        <br>
+
+        <form method="POST" action="/upload" enctype="multipart/form-data" id="uploadForm">
+            <!-- Set the name attribute to a fixed filename -->
+            <input type="file" name="file" accept=".csv, .txt, .xlsx">
+            <input type="submit" value="Upload">
+        </form>
+
+        <!-- Button container for Generate Database and Generate Report -->
+        <div class="button-container">
+            <button onclick="runOtherProgram()">Generate Database</button>
+            <button onclick="generateReport()">Generate Report</button>
+        </div>
+        <br>
+<!--        &lt;!&ndash; Add this to your HTML file to link to the Generated Reports page &ndash;&gt;-->
+<!--        <a href="{{ url_for('list_generated_reports') }}">View Generated Reports</a><br>-->
+<!--        <br>-->
+<!--        <a href="{{ url_for('status_report_steps') }}">Generate Status Report</a><br>-->
+<!--        <br>-->
+<!--        <a href="{{ url_for('change') }}">Update Database</a><br>-->
+<!--        <br>-->
+
+        <button onclick="location.href='{{ url_for('list_generated_reports') }}'">View Generated Reports</button><br>
+        <br>
+        <button onclick="location.href='{{ url_for('status_report_steps') }}'">Generate Status Report</button><br>
+        <br>
+        <button onclick="confirminfoupdate()">Update Database</button><br>
+        <br>
+
+
+        <form action="/logout">
+        <button id="logoutButton" type="submit">Logout</button>
+        </form>
+
+        <div id="bottom-content">
+        <a href="https://www.wmeng.com/">
+            <img src="static/image.jpg" alt="Small Image">
+        </a>
+    </div>
+
+        <!-- JavaScript function to run the other program -->
+     <script>
+        function confirminfoupdate() {
+            var confirmation = confirm("Alert: Ensure you've filled in the database name, table name, server name, and updated the configuration.");
+
+            if (confirmation) {
+                // Redirect to the change page
+                location.href = '{{ url_for('change') }}';
+            } else {
+                // Do nothing or provide additional instructions
+            }
+        }
+        function runOtherProgram() {
+            // Send an HTTP request to trigger the execution of the other program
+            fetch('/run_other_program', {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    alert('Database is generated successfully.');
+                    // Load the list of databases into the dropdown
+                    fetch('/get_databases', {
+                        method: 'GET',
+                    }).then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            return [];
+                        }
+                    }).then(data => {
+                        const databaseSelect = document.getElementById('database_select');
+                        databaseSelect.innerHTML = '<option value="">Select a Database</option>';
+                        data.forEach(database => {
+                            const option = document.createElement('option');
+                            option.value = database;
+                            option.textContent = database;
+                            databaseSelect.appendChild(option);
+                        });
+                    });
+                } else {
+                    alert('Error generating the database.');
+                }
+            });
+        }
+
+        // Function to load and display the list of reports
+        function generateReport() {
+            // Send an HTTP request to trigger the execution of the other program
+            fetch('/generate_report', {
+                method: 'POST',
+            }).then(response => {
+                if (response.ok) {
+                    alert('Report generated successfully.');
+                } else {
+                    alert('Error generating the report.');
+                }
+            });
+        }
+
+        document.getElementById('configForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+            updateConfig(); // Call the JavaScript function to handle the form submission
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent the form from submitting normally
+            uploadFile(); // Call the JavaScript function to handle the form submission
+        });
+
+        function updateConfig() {
+            // Send an HTTP request to update the configuration
+            fetch('/update_config', {
+                method: 'POST',
+                body: new FormData(document.getElementById('configForm')),
+            }).then(response => {
+                if (response.ok) {
+                    // Display a notification for success
+                    alert('Config updated successfully.');
+                } else {
+                    // Display a notification for error
+                    alert('Error updating the config.');
+                }
+            });
+        }
+
+        function uploadFile() {
+            // Send an HTTP request to upload a file
+            fetch('/upload', {
+                method: 'POST',
+                body: new FormData(document.getElementById('uploadForm')),
+            }).then(response => {
+                if (response.ok) {
+                    // Display a notification for success
+                    alert('File uploaded successfully.');
+                } else {
+                    // Display a notification for error
+                    alert('Error uploading the file.');
+                }
+            });
+        }
+
+    // Function to load and display the list of databases
+     // Function to load and display the list of databases
+    function loadDatabases() {
+        // Send an HTTP request to get the list of databases
+        fetch('/get_databases', {
+            method: 'GET',
+        })
+            .then(response => response.json())
+            .then(data => {
+                const databaseSelect = document.getElementById('database_select');
+                databaseSelect.innerHTML = '<option value="">Select a Database</option>';
+                data.forEach(database => {
+                    const option = document.createElement('option');
+                    option.value = database;
+                    option.textContent = database;
+                    databaseSelect.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching databases:', error);
+            });
+    }
+
+    // Function to handle saving the selected or manually entered database in the configuration
+    function saveSelectedDatabase() {
+        const databaseSelect = document.getElementById('database_select');
+        const manualDatabaseInput = document.getElementById('manual_database');
+        const selectedDatabase = databaseSelect.value || manualDatabaseInput.value;
+        if (selectedDatabase) {
+            alert('Warning: Please ensure that the '+ selectedDatabase +' database is closed, as it will be replaced' );
+
+        }
+    }
+
+    document.getElementById('listDatabasesButton').addEventListener('click', loadDatabases);
+    document.getElementById('database_select').addEventListener('change', saveSelectedDatabase);
+    document.getElementById('manual_database').addEventListener('blur', saveSelectedDatabase);
+
+    </script>
+    </body>
+    </html>
