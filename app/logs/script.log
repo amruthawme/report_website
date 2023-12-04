@@ -1,4 +1,0 @@
-ERROR:root:Error in script.py: ('42000', "[42000] [Microsoft][SQL Server Native Client 11.0][SQL Server]Database 'amrutha_nov27_09' already exists. Choose a different database name. (1801) (SQLExecDirectW)")
-ERROR:root:Error in script.py: ('42000', "[42000] [Microsoft][SQL Server Native Client 11.0][SQL Server]Database 'amrutha_nov27_09' already exists. Choose a different database name. (1801) (SQLExecDirectW)")
-ERROR:root:Error in script.py: ('42000', "[42000] [Microsoft][SQL Server Native Client 11.0][SQL Server]Database 'amrutha_nov27_09' already exists. Choose a different database name. (1801) (SQLExecDirectW)")
-ERROR:root:Error in script.py: ('42000', "[42000] [Microsoft][SQL Server Native Client 11.0][SQL Server]Database 'amrutha_dec4_01' already exists. Choose a different database name. (1801) (SQLExecDirectW)")
