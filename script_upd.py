@@ -1,5 +1,11 @@
 import pyodbc
-import config
+import os
+import sys
+# script_dir = os.path.dirname(os.path.abspath(__file__))
+# parent_dir = os.path.dirname(script_dir)
+# sys.path.append(parent_dir)
+#
+# import config
 import logging
 
 from config import server, database, driver, table_name
@@ -227,11 +233,25 @@ def update_database(cableTag, change,notes, color1, wireLabel1, otb1, opoint1, d
 
     logging.basicConfig(filename='logs/upd_script.log', level=logging.DEBUG)
 
+    # try:
+    #     server = config.server
+    #     database = config.database
+    #     driver = config.driver
+    #     table_name = config.table_name
     try:
-        server = config.server
-        database = config.database
-        driver = config.driver
-        table_name = config.table_name
+        # Read configuration from config.py file
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        config_file_path = os.path.join(script_dir, 'config.py')
+        with open(config_file_path) as config_file:
+            config_code = compile(config_file.read(), config_file_path, 'exec')
+            config_globals = {}
+            exec(config_code, config_globals)
+
+        server = config_globals.get('server')
+        database = config_globals.get('database')
+        driver = config_globals.get('driver')
+        table_name = config_globals.get('table_name')
+
 
         connection_string = f'Driver={{SQL Server Native Client 11.0}};Server={server};Database={database};Trusted_Connection=yes;'
         connection = pyodbc.connect(connection_string, autocommit=True)

@@ -1,5 +1,5 @@
 server = 'MPL-SHETTYA'
-database = 'amrutha_dec4_01'
+database = 'amrutha_dec11_01'
 table_name = 'sampletable'
 driver = '{SQL Server}'
 report1_name = 'wire_label.xlsx'
