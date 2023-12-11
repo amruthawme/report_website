@@ -1,18 +1,28 @@
-from app import app
+# from app import app
+# from app import create_app
+
+from run import app
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory,flash
 from flask import send_file
 import os
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask import make_response
 import ast
+import sys
+script_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(script_dir)
+sys.path.append(parent_dir)
 import config
 import json
 import sys
 import pandas as pd
 import pyodbc
+from flask import jsonify
 import script_upd
 from datetime import datetime
 current_time = datetime.now()
+
+# app = create_app()
 
 login_manager = LoginManager()
 login_manager.login_view = "login"  # The login view
@@ -125,20 +135,64 @@ def get_dblist():
 
         # Split the output by newlines
         lines = output.split('\n')
-
-        # Assuming the list is on the second line (index 1), you can safely evaluate it
+        #
+        # # Assuming the list is on the second line (index 1), you can safely evaluate it
+        # try:
+        #     result_list = ast.literal_eval(lines[1])
+        #     print(result_list)
+        #     return result_list
+        #
+        # except (SyntaxError, ValueError) as e:
+        #     print("Error parsing the list:", e)
+    #     #return 'Other program executed successfully. Output:\n' + output
+    #     return output
         try:
             result_list = ast.literal_eval(lines[1])
             print(result_list)
-            return result_list
-
+            # return result_list
+            return jsonify(result_list)
         except (SyntaxError, ValueError) as e:
             print("Error parsing the list:", e)
-    #     #return 'Other program executed successfully. Output:\n' + output
-    #     return output
+            # Return an appropriate response, e.g., an error message
+            return jsonify({'error': 'Invalid JSON format'}), 500
     except subprocess.CalledProcessError as e:
         return 'Error executing the other program. Error:\n' + e.stderr
 
+# @app.route('/get_databases', methods=['GET'])
+# def get_dblist():
+#     import subprocess
+#     try:
+#         # Use sys.executable to specify the Python interpreter
+#         result = subprocess.run(
+#             [sys.executable, 'scripts/script_db.py'],
+#             capture_output=True,
+#             text=True,
+#             check=True
+#         )
+#
+#         output = result.stdout
+#         error_output = result.stderr
+#
+#         output = result.stdout
+#
+#         # Split the output by newlines
+#         lines = output.split('\n')
+#
+#         # Assuming the list is on the second line (index 1), you can safely evaluate it
+#         try:
+#             result_list = ast.literal_eval(lines[1])
+#             print(result_list)
+#             # Convert the Python list to a JSON-formatted string using jsonify
+#             return jsonify(result_list)
+#
+#         except (SyntaxError, ValueError) as e:
+#             print("Error parsing the list:", e)
+#             # Return a JSON response with an error message
+#             return jsonify({'error': 'Error parsing the list'}), 500
+#
+#     except subprocess.CalledProcessError as e:
+#         # Return a JSON response with an error message
+#         return jsonify({'error': 'Error executing the other program'}), 500
 
 @app.route('/update_config', methods=['POST'])
 def upd_config():
