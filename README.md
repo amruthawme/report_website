@@ -8,7 +8,7 @@ Instructions to run:
 
 2. Open command prompt 
 
-3. Get inside projects > reports_wme (cd projects\reports_wme) 
+3. Get inside projects > reports_wme (cd projects/reports_wme) 
 
 4. Type “python run.py” or “flask run” 
 
