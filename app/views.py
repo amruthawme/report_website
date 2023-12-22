@@ -33,7 +33,7 @@ user_credentials = {
     # Add more username-password pairs as needed
 }
 
-ALLOWED_EXTENSIONS = {'csv', 'txt', 'xlsx'}  # Add allowed extensions here
+ALLOWED_EXTENSIONS = {'csv', 'txt', 'xlsx'}  # Add allowed extensions
 
 # Define the upload folder and allowed file extensions
 UPLOAD_FOLDER = 'uploads'
@@ -114,8 +114,6 @@ def upload_form():
 
 @app.route('/get_databases', methods=['GET'])
 def get_dblist():
-    # Put the code here to run your other Python program
-    # For example, you can use the subprocess module to run it
     import subprocess
     import sys
 
@@ -135,17 +133,7 @@ def get_dblist():
 
         # Split the output by newlines
         lines = output.split('\n')
-        #
-        # # Assuming the list is on the second line (index 1), you can safely evaluate it
-        # try:
-        #     result_list = ast.literal_eval(lines[1])
-        #     print(result_list)
-        #     return result_list
-        #
-        # except (SyntaxError, ValueError) as e:
-        #     print("Error parsing the list:", e)
-    #     #return 'Other program executed successfully. Output:\n' + output
-    #     return output
+
         try:
             result_list = ast.literal_eval(lines[1])
             print(result_list)
@@ -157,42 +145,6 @@ def get_dblist():
             return jsonify({'error': 'Invalid JSON format'}), 500
     except subprocess.CalledProcessError as e:
         return 'Error executing the other program. Error:\n' + e.stderr
-
-# @app.route('/get_databases', methods=['GET'])
-# def get_dblist():
-#     import subprocess
-#     try:
-#         # Use sys.executable to specify the Python interpreter
-#         result = subprocess.run(
-#             [sys.executable, 'scripts/script_db.py'],
-#             capture_output=True,
-#             text=True,
-#             check=True
-#         )
-#
-#         output = result.stdout
-#         error_output = result.stderr
-#
-#         output = result.stdout
-#
-#         # Split the output by newlines
-#         lines = output.split('\n')
-#
-#         # Assuming the list is on the second line (index 1), you can safely evaluate it
-#         try:
-#             result_list = ast.literal_eval(lines[1])
-#             print(result_list)
-#             # Convert the Python list to a JSON-formatted string using jsonify
-#             return jsonify(result_list)
-#
-#         except (SyntaxError, ValueError) as e:
-#             print("Error parsing the list:", e)
-#             # Return a JSON response with an error message
-#             return jsonify({'error': 'Error parsing the list'}), 500
-#
-#     except subprocess.CalledProcessError as e:
-#         # Return a JSON response with an error message
-#         return jsonify({'error': 'Error executing the other program'}), 500
 
 @app.route('/update_config', methods=['POST'])
 def upd_config():
@@ -207,12 +159,15 @@ def upd_config():
         config_file.write(f"server = '{server}'\n")
         config_file.write(f"database = '{database}'\n")
         config_file.write(f"table_name = '{table_name}'\n")
-        config_file.write(f"driver = '{{SQL Server}}'\n")
+        config_file.write(f"driver = '{{ODBC Driver 17 for SQL Server}}'\n")
         config_file.write(f"report1_name = 'wire_label.xlsx'\n")
         config_file.write(f"report2_name = 'cabel_label.xlsx'\n")
         config_file.write(f"report3_name = 'status_report.xlsx'\n")
         config_file.write(f"report4_name = 'modified_status_report.xlsx'\n")
+        config_file.write(f"Trusted_Connection = 'yes'\n")
+
     return "Config updated successfully"
+
 
 
 # Route to handle file upload
@@ -256,16 +211,14 @@ def upload_file():
 #         return 'Error executing the other program. Error:\n' + e.stderr
 
 # Route to handle running the other program
+print('try this')
+import subprocess
+import sys
 @app.route('/run_other_program', methods=['POST'])
 def run_other_program():
-    # Put the code here to run your other Python program
-    # For example, you can use the subprocess module to run it
-    import subprocess
-    import sys
-
     try:
         # Use sys.executable to specify the Python interpreter
-        result = subprocess.run(
+        result = subprocess.run( 	
             [sys.executable, 'scripts/script.py'],
             capture_output=True,
             text=True,
