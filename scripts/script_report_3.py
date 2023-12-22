@@ -13,7 +13,7 @@ def generate_report():
     # Define the SQL Server connection string
     server = config.server
     database = config.database
-    connection_string = f'Driver={{SQL Server Native Client 11.0}};Server={server};Database={database};Trusted_Connection=yes;'
+    connection_string = f'Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};Trusted_Connection=yes;'
 
     # Establish a connection to SQL Server
     connection = pyodbc.connect(connection_string)
@@ -21,7 +21,7 @@ def generate_report():
     # SQL Query
     sql_query = """
     WITH CTE AS (
-SELECT Cable_Tag, 
+    SELECT Cable_Tag, 
     Cabinet_Origination as Origination, 
     Wire_Label1 AS Wire_label, 
     Color1 AS Color, 

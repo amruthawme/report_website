@@ -13,7 +13,7 @@ def generate_report():
     # Define the SQL Server connection string
     server = config.server
     database = config.database
-    connection_string = f'Driver={{SQL Server Native Client 11.0}};Server={server};Database={database};Trusted_Connection=yes;'
+    connection_string = f'Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database={database};Trusted_Connection=yes;'
 
     # Establish a connection to SQL Server`
     connection = pyodbc.connect(connection_string)

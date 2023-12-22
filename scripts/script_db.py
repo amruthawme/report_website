@@ -5,6 +5,7 @@ import pyodbc
 import sys
 import os
 
+
 # Add the parent directory of the script to sys.path
 script_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(script_dir)
@@ -15,10 +16,6 @@ sys.path.append(parent_dir)
 # Now import config
 import config
 
-
-
-
-
 def main():
     # Step 0
     # Define the connection string
@@ -27,12 +24,13 @@ def main():
 
     # Configure logging
     logging.basicConfig(filename='logs/script.log', level=logging.DEBUG)
+    # logging.basicConfig(filename=log_file_path, level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
 
     try:
 
         server = config.server
 
-        connection_string = f'Driver={{SQL Server Native Client 11.0}};Server={server};Database=master;Trusted_Connection=yes;'
+        connection_string = f'Driver={{ODBC Driver 17 for SQL Server}};Server={server};Database=master;Trusted_Connection=yes;'
 
         # Connect to the SQL Server instance
         connection = pyodbc.connect(connection_string, autocommit=True)
