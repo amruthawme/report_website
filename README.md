@@ -4,7 +4,7 @@ Server to generate the reports for cabel label and wire label
 
 Instructions to run: 
 
-1. Get the access to the server (COLO-lblmaster) and SQL Express (colo-lblmaster\SQLEXPRESS)
+1. Get the access to SQL Express (colo-lblmaster\SQLEXPRESS)
 
 2. Open your favourite web browser
 
