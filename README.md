@@ -8,7 +8,7 @@ Instructions to run:
 
 2. Open your favourite web browser
 
-3. Type "[lblmaster.wmeng.com](http://lblmaster.wmeng.com) 
+3. Type http://lblmaster.wmeng.com
 
 4. Login with the credentials and begin to use.
 
