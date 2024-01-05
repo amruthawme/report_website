@@ -1,6 +1,6 @@
 **COLO-lblmaster**
 
-Server to generate the reports for cabel label and wire label
+Server to generate the reports for cabel labels and wire labels
 
 Instructions to run: 
 
